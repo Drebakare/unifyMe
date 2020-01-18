@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Staff;
 use App\Biodata;
 use App\Department;
 use App\Faculty;
+use App\Nationality;
+use App\Semester;
+use App\SemesterYear;
+use App\State;
 use App\Student;
 use App\University;
 use App\User;
@@ -24,7 +28,8 @@ class StaffController extends Controller
     }
 
     public function addStaff(){
-        return view('Dashboard.Others.Staff.add-staff');
+        $faculties = Faculty::getAllFaculties(Auth::user()->university_id);
+        return view('Dashboard.Others.Staff.add-staff', compact("faculties"));
     }
 
     public function submitAddStudentForm(Request $request){
@@ -58,6 +63,7 @@ class StaffController extends Controller
             'phone_number' => "bail|required",
             'university_id' => "bail|required",
             'email' => "bail|required",
+            "faculty_id" => 'bail|required'
         ]);
         $check_staff = User::checkUser($request->email);
         if ($check_staff){
@@ -125,6 +131,48 @@ class StaffController extends Controller
 
     public function updateStudentBiodata($id){
         $biodata = Biodata::getStudentBioData($id);
-        return view("Dashboard.Others.Staff.add-student-biodata", compact("biodata"));
+        $states = State::getAllStates();
+        $nations = Nationality::getAllNationalities();
+        return view("Dashboard.Others.Staff.add-student-biodata", compact("biodata","states", "nations", "id"));
+    }
+
+    public function submitAddStudentBiodata(Request $request){
+        $biodata = Biodata::createStudentBiodata($request);
+        if ($biodata){
+            return redirect()->back()->with('success', "student's biodata succesfully added");
+        }
+        else{
+            return redirect()->back()->with('failure', "student's biodata could not be added");
+
+        }
+    }
+
+    public function submitUpdateStudentBiodata(Request $request){
+        $biodata = Biodata::updateStudentBiodata($request);
+        if ($biodata){
+            return redirect()->back()->with('success', "student's biodata succesfully updated");
+        }
+        else{
+            return redirect()->back()->with('failure', "student's biodata could not be updated");
+
+        }
+    }
+
+    public function uploadStudentResult(){
+        $years = Year::getYears();
+        $semesters = Semester::getSemesters();
+        /*$faculties = Faculty::getAllFaculties(Auth::user()->university_id);*/
+        return view("Dashboard.Others.Staff.upload-student-result", compact('years', 'semesters', "students"));
+    }
+
+    public function selectSemester(Request $request){
+        $semester  = SemesterYear::createSemesterYear($request);
+        if (Auth::user()->faculty_id != null){
+            $students =  Student::getSpecificStudents(Auth::user()->university_id,Auth::user()->faculty_id);
+        }
+        else{
+            $students = Student::getAllStudents(Auth::user()->university_id);
+        }
+        return view("Dashboard.Others.Staff.upload-result", compact('students', 'semester'));
     }
 }

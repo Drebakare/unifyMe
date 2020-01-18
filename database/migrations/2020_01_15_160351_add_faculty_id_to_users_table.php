@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSemestersTable extends Migration
+class AddFacultyIdToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateSemestersTable extends Migration
      */
     public function up()
     {
-        Schema::create('semesters', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->Integer('semester_type');
-            $table->Integer('year');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger("faculty_id")->nullable();
+            $table->foreign("faculty_id")->references("id")->on("faculties");
         });
     }
 
@@ -28,6 +26,8 @@ class CreateSemestersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('semesters');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }

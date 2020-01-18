@@ -56,39 +56,59 @@ Route::post('user/login',[
 Route::post('user/submit-add-student-form',[
     'uses' => 'Staff\StaffController@submitAddStudentForm',
     'as' => 'user.submit-add-student-form',
-]);
+])->middleware("checkStaff");
 
 Route::post('user/submit-add-multiple-students',[
     'uses' => 'Staff\StaffController@submitAddMultipleStudents',
     'as' => 'user.submit-add-multiple-students',
-]);
+])->middleware("checkStaff");
 
 Route::get('/user/add-student',[
     'uses' => 'Staff\StaffController@addStudent',
     'as' => 'user.add-student',
-])->middleware('checkAuth');
+])->middleware('checkStaff');
 
 Route::post('/user/update-student-info/{id}',[
     'uses' => 'Staff\StaffController@updateStudentDetails',
     'as' => 'user.update-student-info',
-])->middleware('checkAuth');
+])->middleware('checkStaffEligibility');
 
 Route::get('/user/add-staff',[
     'uses' => 'Staff\StaffController@addStaff',
     'as' => 'user.add-staff',
-])->middleware('checkAuth');
+])->middleware('checkStaff');
 
 Route::get('/update-bio-data',[
     'uses' => 'Staff\StaffController@updateBioData',
     'as' => 'update-bio-data',
-])->middleware('checkAuth');
+])->middleware('checkStaff');
 
 Route::get('user/update-user-biodata/{id}',[
     'uses' => 'Staff\StaffController@updateStudentBiodata',
     'as' => 'user.update-user-biodata',
-])->middleware('checkAuth');
+])->middleware('checkStaffEligibility');
+
+Route::get('staff/upload-student-result',[
+    'uses' => 'Staff\StaffController@uploadStudentResult',
+    'as' => 'staff.upload-student-result',
+])->middleware('checkStaff');
 
 Route::post('user/submit-add-staff-form',[
     'uses' => 'Staff\StaffController@submitAddStaffForm',
     'as' => 'user.submit-add-staff-form',
-]);
+])->middleware('checkStaff');
+
+Route::post('user/submit-add-student-biodata/{id}',[
+    'uses' => 'Staff\StaffController@submitAddStudentBiodata',
+    'as' => 'user.submit-add-student-biodata',
+])->middleware("checkStaffEligibility");
+
+Route::post('user/submit-update-student-biodata/{id}',[
+    'uses' => 'Staff\StaffController@submitUpdateStudentBiodata',
+    'as' => 'user.submit-update-student-biodata',
+])->middleware("checkStaffEligibility");
+
+Route::post('user/select-semester',[
+    'uses' => 'Staff\StaffController@selectSemester',
+    'as' => 'user.select-semester',
+])->middleware("checkStaff");

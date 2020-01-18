@@ -18,14 +18,33 @@
                 </ul>
                 <div class="clearfix"></div>
             </li>
-            <li>
-                <a href="{{route('update-bio-data')}}"><i class="fa fa-upload menu-icon"></i>Update Student Bio-data</a>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-upload menu-icon"></i>Student Bio-data <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{route('update-bio-data')}}"><i class="fa fa-caret-right"></i>Update Individual Bio-Data</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-caret-right"></i> Update Bio-Data using Excel</a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
             </li>
-            <li>
-                <a href="#"><i class="fa fa-tasks menu-icon"></i>Student Management</a>
-            </li>
-            <li>
-                <a href="#"><i class="fa fa-upload menu-icon"></i>Upload Students' Result</a>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-upload menu-icon"></i>Upload Students' Result<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="{{route('staff.upload-student-result')}}"><i class="fa fa-caret-right"></i>Upload Individual Result</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-caret-right"></i> Update Result using Excel</a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
             </li>
             <li>
                 <a href="#"><i class="fa fa-tasks menu-icon"></i>Manage Students' Result</a>

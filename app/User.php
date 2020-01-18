@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'user_type', 'university_id', 'company_id', 'is_verified', 'token', 'phone_number'
+        'name', 'email', 'password', 'user_type', 'university_id', 'company_id', 'is_verified', 'token',
+        'phone_number', 'faculty_id'
     ];
 
     /**
@@ -86,6 +87,7 @@ class User extends Authenticatable
             "user_type" => 1,
             "university_id" => $request->university_id,
             "token" => Str::Random(16),
+            "faculty" => $request->faculty_id,
         ]);
         if($status){
             return true;

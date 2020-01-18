@@ -31,6 +31,16 @@ class Student extends Model
         return $students;
     }
 
+    public static function getSpecificStudents($university_id, $faculty_id){
+        $students = Student::where(['university_id' => $university_id , 'faculty_id' => $faculty_id])->get();
+        return $students;
+    }
+
+    public static function getAllFacultyStudents($university_id, $faculty_id){
+        $students = Student::where(["$university_id"])->get();
+        return $students;
+    }
+
     public static function getLatest5students($university_id){
         $students = Student::where('university_id', $university_id)->orderBy('id', "desc")->get();
         if (count($students) >5){
@@ -48,6 +58,11 @@ class Student extends Model
         else{
             return false;
         }
+    }
+
+    public static function getStudentById($id){
+        $student = Student::where("id", $id)->first();
+        return $student;
     }
 
     public static function addStudent($student){

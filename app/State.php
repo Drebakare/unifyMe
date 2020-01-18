@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     protected $fillable = ["name"];
+
+    public static function getAllStates(){
+        $states = State::get();
+        return $states;
+    }
 }

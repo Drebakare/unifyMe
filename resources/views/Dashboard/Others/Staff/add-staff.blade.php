@@ -49,6 +49,14 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="col-sm-4" style="padding-top: 15px;">
+                                            <label class="clear-top-margin"><i class="fa fa-universal-access"></i>Faculty</label>
+                                            <select name="faculty_id" required>
+                                                @foreach($faculties as $faculty)
+                                                   <option  value="{{$faculty->id}}">{{$faculty->faculty_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4" style="padding-top: 15px;">
                                             <label class="clear-top-margin"><i class="fa fa-mail-forward"></i>Staff Email Address</label>
                                             <input type="email" placeholder="Email" name="email" required/>
                                         </div>

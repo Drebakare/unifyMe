@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 clear-padding-xs">
-                    <h5 class="page-title"><i class="fa fa-user"></i>ADD STUDENT BIODATA</h5>
+                    <h5 class="page-title"><i class="fa fa-user"></i>Add / Update Student Bio-Data</h5>
                     <div class="section-divider"></div>
                 </div>
             </div>
@@ -30,16 +30,44 @@
                                         {{session('success')}}
                                     </div>
                                 @endif
-                                <form method="post" action="{{route("user.submit-add-student-form")}}">
+                                @if(!$biodata)
+                                    <form method="post" action="{{route("user.submit-add-student-biodata", ["id" => $id])}}">
                                     @csrf
                                     <div class="dash-form">
-                                        <div class="col-sm-4">
-                                            <label class="clear-top-margin"><i class="fa fa-user-circle-o"></i>Student Name</label>
-                                            <input type="text" placeholder="Student Name" name="student_name" required />
+                                        <div class="col-sm-4 hidden">
+                                            <input type="text" name="student_id" value="{{$id}}" required hidden />
                                         </div>
                                         <div class="col-sm-4">
-                                            <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Student Matric No</label>
-                                            <input type="text" placeholder="Matric No" name="matric_no" required/>
+                                            <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Email</label>
+                                            <input type="email" placeholder="Email" name="email"  required/>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Phone Number</label>
+                                            <input type="tel" placeholder="Phone Number" name="phone_number" max="11"  required/>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>DOB</label>
+                                            <input type="date" placeholder="Date of Birth" name="dob" max="11"  required/>
+                                        </div>
+                                        <div class="col-sm-4" style="padding-top: 15px;">
+                                            <label class="clear-top-margin"><i class="fa fa-home"></i>Nationality</label>
+                                            <select name="nationality" required>
+                                                @foreach($nations as $nation)
+                                                    <option  value="{{$nation->name}}"> {{$nation->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4" style="padding-top: 15px;">
+                                            <label class="clear-top-margin"><i class="fa fa-home"></i>State</label>
+                                            <select name="state" required>
+                                                @foreach($states as $state)
+                                                    <option  value="{{$state->name}}"> {{$state->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4" style="padding-top: 15px;">
+                                            <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Town</label>
+                                            <input type="text" placeholder="Town" name="town"  required/>
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="col-sm-12">
@@ -47,7 +75,52 @@
                                         </div>
                                     </div>
                                 </form>
-
+                                @else
+                                        <form method="post" action="{{route("user.submit-update-student-biodata", ["id" =>$id])}}">
+                                            @csrf
+                                            <div class="dash-form">
+                                                <div class="col-sm-4 hidden">
+                                                    <input type="text" name="student_id" value="{{$id}}" required hidden />
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Email</label>
+                                                    <input type="email" placeholder="Email" name="email" value="{{$biodata->email_address}}"  required/>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Phone Number</label>
+                                                    <input type="tel" placeholder="Phone Number" name="phone_number" value="{{$biodata->phone_number}}" max="11"  required/>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>DOB</label>
+                                                    <input type="date" placeholder="Date of Birth" name="dob" max="11" value="{{$biodata->dob}}"  required/>
+                                                </div>
+                                                <div class="col-sm-4" style="padding-top: 15px;">
+                                                    <label class="clear-top-margin"><i class="fa fa-home"></i>Nationality</label>
+                                                    <select name="nationality" required>
+                                                        @foreach($nations as $nation)
+                                                            <option  value="{{$nation->name}}" @if($nation->name == $biodata->nationality) selected @endif> {{$nation->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4" style="padding-top: 15px;">
+                                                    <label class="clear-top-margin"><i class="fa fa-home"></i>State</label>
+                                                    <select name="state" required>
+                                                        @foreach($states as $state)
+                                                            <option  value="{{$state->name}}" @if($state->name == $biodata->state) selected @endif> {{$state->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4" style="padding-top: 15px;">
+                                                    <label class="clear-top-margin"><i class="fa fa-sort-numeric-asc"></i>Town</label>
+                                                    <input type="text" placeholder="Town" name="town" value="{{$biodata->town}}" required/>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" id="submit-button"><i class="fa fa-paper-plane"></i>Update</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                @endif
                             </div>
                             <div class="clearfix"></div>
                         </div>

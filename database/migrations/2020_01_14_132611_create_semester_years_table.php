@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateYearsTable extends Migration
+class CreateSemesterYearsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateYearsTable extends Migration
      */
     public function up()
     {
-        Schema::create('years', function (Blueprint $table) {
+        Schema::create('semester_years', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('year');
+            $table->unsignedBigInteger('semester_id');
+            $table->unsignedInteger('year_id');
             $table->timestamps();
+
+            $table->foreign("year_id")->references("id")->on("years");
+            $table->foreign("semester_id")->references("id")->on("semesters");
         });
     }
 
@@ -27,6 +31,6 @@ class CreateYearsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('years');
+        Schema::dropIfExists('semester_years');
     }
 }

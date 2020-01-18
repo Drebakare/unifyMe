@@ -14,7 +14,7 @@ class Aperformance extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function semesters(){
-        return $this->belongsTo(Semester::class);
+    public function semesteryears(){
+        return $this->belongsTo(SemesterYear::class);
     }
 }
