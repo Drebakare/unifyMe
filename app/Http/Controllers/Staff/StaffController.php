@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Aperformance;
 use App\Biodata;
 use App\Department;
 use App\Faculty;
@@ -174,5 +175,11 @@ class StaffController extends Controller
             $students = Student::getAllStudents(Auth::user()->university_id);
         }
         return view("Dashboard.Others.Staff.upload-result", compact('students', 'semester'));
+    }
+
+    public function processResult(Request $request){
+        for($i = 0; $i < $request->maximum_number; $i++){
+            $performance = Aperformance::addPerformace($request, $i);
+        }
     }
 }

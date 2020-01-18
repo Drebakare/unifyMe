@@ -112,3 +112,8 @@ Route::post('user/select-semester',[
     'uses' => 'Staff\StaffController@selectSemester',
     'as' => 'user.select-semester',
 ])->middleware("checkStaff");
+
+Route::post('user/process-student-result',[
+    'uses' => 'Staff\StaffController@processResult',
+    'as' => 'user.process-student-result',
+])->middleware("checkStaff");

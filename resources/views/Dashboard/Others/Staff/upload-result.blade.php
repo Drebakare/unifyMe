@@ -2,52 +2,42 @@
 @section('contents')
 
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 clear-padding-xs">
-                    <h5 class="page-title"><i class="fa fa-address-card"></i>Add Grade</h5>
-                    <div class="section-divider"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 clear-padding-xs">
-                    <div class="col-lg-12">
-                        <div class="dash-item first-dash-item">
-                            <h6 class="item-title"><i class="fa fa-address-book"></i>Kindly fill the following form to add students' result</h6>
-                            <form method="post" action="{{route("user.select-semester")}}">
-                                @csrf
-                                <div class="inner-item dash-search-form">
-                                    <div class="col-md-3 col-sm-6">
-                                        <label>Year</label>
-                                        <select name="year_id">
-                                            @foreach($years as $year)
-                                                <option value="{{$year->id}}">{{$year->year}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 col-sm-6">
-                                        <label>Semester</label>
-                                        <select name="semester_id">
-                                            @foreach($semesters as $semester)
-                                                <option value="{{$semester->id}}">{{$semester->semester}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="clearfix visible-sm"></div>
-                                    <div class="col-md-3 col-sm-6">
-                                        <label>University</label>
-                                        <select  name="university_id" disabled>
-                                            <option value="{{Auth::user()->university_id}}" selected >{{Auth::user()->university->name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="inner-item">
-                                    <div class="table-action-box">
-                                        <button id="submit-button"><i class="fa fa-check"></i>Next</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+            <div class="col-lg-12">
+                <div class="dash-item">
+                    <h6 class="item-title"><i class="fa fa-info-circle"></i>Add Students Grade</h6>
+                    <div class="inner-item">
+                        <form method="post" action="{{route('user.process-student-result')}}">
+                            @csrf
+                            <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th><i class="fa fa-user"></i>Name</th>
+                                    <th><i class="fa fa-code"></i>Matric Number</th>
+                                    <th><i class="fa fa-cogs"></i>Faculty</th>
+                                    <th><i class="fa fa-cogs"></i>Department</th>
+                                    <th><i class="fa fa-address-card"></i>Total Point</th>
+                                    <th><i class="fa fa-address-card"></i>Total Unit</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($students as $key => $student)
+                                    <tr>
+                                        <td>{{$student->student_name}}</td>
+                                        <td><input name="matric_no_{{$key}}" value="{{$student->student_matric_no}}" type="text" placeholder="{{$student->student_matric_no}}" class="datatable-input"  /></td>
+                                        <td>{{$student->faculty->faculty_name}}</td>
+                                        <td>{{$student->department->department_name}}</td>
+                                        <td><input name="total_point_{{$key}}" type="number" placeholder="Total Point" class="datatable-input" required/></td>
+                                        <td><input name="total_unit_{{$key}}" type="number" placeholder="Total Unit" class="datatable-input" required/></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <input name="semester_yr_id" value="{{$semester}}" hidden />
+                            <input name="maximum_number" value="{{count($students)}}" hidden />
+                            <div class="table-action-box">
+                                <button id="submit-button"><i class="fa fa-check"></i>Upload Result</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

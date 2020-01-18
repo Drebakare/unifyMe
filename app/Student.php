@@ -65,6 +65,11 @@ class Student extends Model
         return $student;
     }
 
+    public static function getStudentByMatricNo($matric_no){
+        $student = Student::where("student_matric_no", $matric_no)->first();
+        return $student;
+    }
+
     public static function addStudent($student){
         $student_status = Student::create([
             'university_id' => $student->university_id,
