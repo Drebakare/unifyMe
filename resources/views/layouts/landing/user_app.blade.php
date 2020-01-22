@@ -31,7 +31,7 @@
             @include('layouts.landing.user_include.footer')
         </div>
     </div>
-
+@yield("page_css")
 <script src="{{asset('_dashboard/assets/js/jQuery_v3_2_0.min.js')}}"></script>
 <script src="{{asset('_dashboard/assets/js/jquery-ui.min.js')}}"></script>
 <script src="{{asset('_dashboard/assets/js/bootstrap.min.js')}}"></script>

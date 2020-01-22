@@ -108,6 +108,11 @@ Route::post('user/submit-update-student-biodata/{id}',[
     'as' => 'user.submit-update-student-biodata',
 ])->middleware("checkStaffEligibility");
 
+Route::get('user/view-student-result/{id}',[
+    'uses' => 'Staff\StaffController@viewStudentResult',
+    'as' => 'user.view-student-result',
+])->middleware("checkStaffEligibility");
+
 Route::post('user/select-semester',[
     'uses' => 'Staff\StaffController@selectSemester',
     'as' => 'user.select-semester',
@@ -117,3 +122,13 @@ Route::post('user/process-student-result',[
     'uses' => 'Staff\StaffController@processResult',
     'as' => 'user.process-student-result',
 ])->middleware("checkStaff");
+
+Route::post('user/process-update-student-result',[
+    'uses' => 'Staff\StaffController@processUpdateResult',
+    'as' => 'user.process-update-student-result',
+])->middleware("checkStaff");
+
+Route::get('user/view-results',[
+    'uses' => 'Staff\StaffController@viewResult',
+    'as' => 'user.view-results',
+])->middleware('checkStaff');

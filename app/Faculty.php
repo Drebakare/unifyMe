@@ -22,6 +22,9 @@ class Faculty extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+    public function requestresults(){
+        return $this->hasMany(RequestResult::class);
+    }
 
     public static function getAllFaculties($university_id){
         $faculties = Faculty::where('university_id', $university_id)->get();

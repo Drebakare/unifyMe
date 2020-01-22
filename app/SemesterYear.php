@@ -14,11 +14,11 @@ class SemesterYear extends Model
     }
 
     public function year(){
-        return $this->hasMany(Year::class);
+        return $this->belongsTo(Year::class);
     }
 
     public function semesters(){
-        return $this->hasMany(Semester::class);
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 
     public static function createSemesterYear($request){

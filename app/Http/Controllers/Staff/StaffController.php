@@ -14,6 +14,7 @@ use App\Student;
 use App\University;
 use App\User;
 use App\Year;
+use DemeterChain\A;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -168,18 +169,79 @@ class StaffController extends Controller
 
     public function selectSemester(Request $request){
         $semester  = SemesterYear::createSemesterYear($request);
+        $a_performance = [];
         if (Auth::user()->faculty_id != null){
+            $students =  Student::getSpecificStudents(Auth::user()->university_id,Auth::user()->faculty_id);
+
+            foreach($students as $key => $student){
+                $academic_performance = Aperformance::getPerformance($student->id, $semester);
+                if ($academic_performance != null){
+                    $a_performance[$key] = $academic_performance;
+                }
+            }
+        }
+        else{
+            $students = Student::getAllStudents(Auth::user()->university_id);
+            foreach($students as $key => $student){
+                $academic_performance = Aperformance::getPerformance($student->id, $semester);
+                if ($academic_performance != null){
+                    $a_performance[$key] = $academic_performance;
+                }
+            }
+        }
+        return view("Dashboard.Others.Staff.upload-result", compact('students', 'semester', 'a_performance'));
+    }
+
+    public function processResult(Request $request){
+        $status = false;
+        for($i = 0; $i < $request->maximum_number; $i++){
+            $matric_no = 'matric_no_'.$i;
+            $check_status = Aperformance::checkPerformance($request->$matric_no, $request->semester_yr_id);
+            if ($check_status){
+                $status = false;
+                break;
+            }
+            else{
+                Aperformance::addPerformace($request, $i);
+                $status = true;
+            }
+        }
+        if ($status){
+            return redirect(route('staff.upload-student-result'))->with('success', 'result uploaded successfully');
+        }
+        else{
+            return redirect(route('staff.upload-student-result'))->with("failure", "Result already uploaded");
+        }
+
+    }
+    public function processUpdateResult(Request $request){
+        $status = false;
+        for($i = 0; $i < $request->maximum_number; $i++){
+            Aperformance::addPerformace($request, $i);
+            $status = true;
+        }
+        if ($status){
+            return redirect(route('staff.upload-student-result'))->with('success', 'result updated successfully');
+        }
+        else{
+            return redirect(route('staff.upload-student-result'))->with("failure", "Result could not be updated");
+        }
+    }
+
+    public function viewResult(){
+        if (Auth::user()->faculty_id != null) {
             $students =  Student::getSpecificStudents(Auth::user()->university_id,Auth::user()->faculty_id);
         }
         else{
             $students = Student::getAllStudents(Auth::user()->university_id);
         }
-        return view("Dashboard.Others.Staff.upload-result", compact('students', 'semester'));
+        return view('Dashboard.Others.Staff.view-result', compact('students'));
     }
 
-    public function processResult(Request $request){
-        for($i = 0; $i < $request->maximum_number; $i++){
-            $performance = Aperformance::addPerformace($request, $i);
-        }
+    public function viewStudentResult($id){
+        $student = Student::getStudentById($id);
+        $results = Aperformance::studentsPerformance($id);
+        $school_grade_point = 5;
+        return view('Dashboard.Others.Staff.view-student-result', compact('results', 'school_grade_point', 'student'));
     }
 }

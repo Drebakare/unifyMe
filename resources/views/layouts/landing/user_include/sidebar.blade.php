@@ -47,13 +47,13 @@
                 <div class="clearfix"></div>
             </li>
             <li>
-                <a href="#"><i class="fa fa-tasks menu-icon"></i>Manage Students' Result</a>
+                <a href="{{route('user.view-results')}}"><i class="fa fa-tasks menu-icon"></i>View Students' Result</a>
             </li>
         @endif
         <li>
-            <a href="#"><i class="fa fa-check menu-icon"></i>Request Result</a>
+            <a href="{{route('user.request-result')}}"><i class="fa fa-check menu-icon"></i>Request Result</a>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-users menu-icon"></i> STUDENTS <span class="caret"></span>
             </a>
@@ -67,7 +67,7 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-user-secret menu-icon"></i> TEACHERS <span class="caret"></span>
             </a>
@@ -81,16 +81,16 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li>
+        <li class="hidden">
             <a href="message.html"><i class="fa fa-envelope menu-icon"></i> MY MESSAGES</a>
         </li>
-        <li>
+        <li class="hidden">
             <a href="admin-add-announcement.html"><i class="fa fa-bullhorn menu-icon"></i> ANNOUNCEMENTS</a>
         </li>
         <li>
             <a href="{{route('logout')}}"><i class="fa fa-close menu-icon"></i>Logout</a>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-file-o menu-icon"></i> CLASSES <span class="caret"></span>
             </a>
@@ -110,7 +110,7 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-book menu-icon"></i> SUBJECTS <span class="caret"></span>
             </a>
@@ -124,7 +124,7 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-calendar menu-icon"></i> TIMETABLE <span class="caret"></span>
             </a>
@@ -138,7 +138,7 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li class="dropdown">
+        <li class="dropdown hidden">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-address-card menu-icon"></i> REPORTS <span class="caret"></span>
             </a>

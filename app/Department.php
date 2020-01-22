@@ -22,6 +22,9 @@ class Department extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+    public function requestresults(){
+        return $this->hasMany(RequestResult::class);
+    }
 
     public static function getAllDepartments($university_id, $faculty_id){
         $departments = Department::where("university_id", $university_id)->get();

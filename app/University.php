@@ -25,6 +25,9 @@ class University extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+    public function requestresults(){
+        return $this->hasMany(RequestResult::class);
+    }
 
     public static function getAllUniversities(){
         $universities = University::get();

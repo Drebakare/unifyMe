@@ -13,7 +13,7 @@ class Year extends Model
         return $years;
     }
 
-    public function semesteryears(){
+    public function semesteryear(){
         return $this->hasMany(SemesterYear::class);
     }
 }

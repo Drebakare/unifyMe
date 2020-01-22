@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->hasMany(Rperformance::class);
     }
 
+    public function requestresults(){
+        return $this->hasMany(RequestResult::class);
+    }
+
     public static function checkUser($email){
         $check_status = User::where('email',$email)->first();
         if ($check_status){

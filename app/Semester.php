@@ -19,7 +19,7 @@ class Semester extends Model
     }
 
     public function semesteryear(){
-        return $this->belongsTo(SemesterYear::class);
+        return $this->hasMany(SemesterYear::class);
     }
 
     public static function getSemesters(){

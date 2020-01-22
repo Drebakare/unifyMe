@@ -8,7 +8,7 @@ use phpDocumentor\Reflection\Types\Self_;
 class Aperformance extends Model
 {
     protected $fillable = [
-        'student_id', 'semester_id', 'total_point', 'total_unit', 'student_gp'
+        'student_id',  'total_point', 'total_unit', 'student_gp','semester_year_id'
     ];
 
     public function students(){
@@ -16,27 +16,57 @@ class Aperformance extends Model
     }
 
     public function semesteryears(){
-        return $this->belongsTo(SemesterYear::class);
+        return $this->belongsTo(SemesterYear::class,'semester_year_id');
     }
 
     public static function checkPerformance($matric_no, $semester_id){
         $student_id = Student::getStudentByMatricNo($matric_no);
-
-        $status = Aperformance::where(["student_id" => $student_id, "semester_id" => $semester_id])->first();
+        $status = Aperformance::where(["student_id" => $student_id->id, "semester_year_id" => $semester_id])->first();
         if ($status){
-            return false;
+            return true;
         }
         else{
-            return true;
+            return false;
         }
     }
 
+    public static function getPerformance($student_id, $semester_year_id){
+        $academic_performance = Aperformance::where(["student_id" => $student_id, "semester_year_id" => $semester_year_id])->first();
+        return $academic_performance ;
+    }
+
     public static function addPerformace($request, $count){
-        $check_status = Aperformance::checkPerformance($request->matric_no_.$count, $request->semester_yr_id);
-        if ($check_status){
-        }
-        else{
-            return false;
-        }
+        $matric_no = 'matric_no_'.$count;
+        $total_point = 'total_point_'.$count;
+        $total_unit = 'total_unit_'.$count;
+        $school_grade_point = 5;
+        $student = Student::getStudentByMatricNo($request->$matric_no);
+        $add_academic_performance = Aperformance::create([
+            "student_id" => $student->id,
+            "semester_year_id" => $request->semester_yr_id,
+            "total_point" => $request->$total_point,
+            "total_unit" =>$request->$total_unit,
+            "student_gp" => round(($request->$total_unit/$request->$total_point)* $school_grade_point, 2),
+        ]);
+    }
+
+    public static function updatePerformace($request, $count){
+        $matric_no = 'matric_no_'.$count;
+        $total_point = 'total_point_'.$count;
+        $total_unit = 'total_unit_'.$count;
+        $school_grade_point = 5;
+        $student = Student::getStudentByMatricNo($request->$matric_no);
+        $add_academic_performance = Aperformance::where(["student_id" => $student->id, "semester_id" =>$request->semester_yr_id])->update([
+            "student_id" => $student->id,
+            "semester_year_id" => $request->semester_yr_id,
+            "total_point" => $request->$total_point,
+            "total_unit" =>$request->$total_unit,
+            "student_gp" => round(($request->$total_unit/$request->$total_point)* $school_grade_point, 2),
+        ]);
+    }
+
+    public static function studentsPerformance($student_id){
+        $results = Aperformance::where('student_id', $student_id)->get();
+        return $results;
     }
 }
