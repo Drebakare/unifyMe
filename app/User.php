@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Mail\RegistrationMail;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable
@@ -41,7 +44,7 @@ class User extends Authenticatable
     ];
 
     public function company(){
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
     public function university(){
         return $this->belongsTo(University::class);
@@ -94,6 +97,7 @@ class User extends Authenticatable
             "faculty" => $request->faculty_id,
         ]);
         if($status){
+            Mail::to($status->email)->send(new RegistrationMail($status));
             return true;
         }
         else{
@@ -101,5 +105,79 @@ class User extends Authenticatable
         }
 
     }
+
+    public static function addNUCStaff($request){
+        $check_user = User::where(['name' => $request->name, 'email' => $request->email_address, "user_type" => 3])->first();
+        if ($check_user){
+            return false;
+        }
+        else{
+            $status = User::create([
+                "name" => $request->name,
+                "email" => $request->email_address,
+                "password" => Hash::make($request->email_address),
+                "phone_number" => $request->phone_number,
+                "user_type" => 3,
+                "token" => Str::Random(16),
+            ]);
+            if($status){
+                Mail::to($status->email)->send(new RegistrationMail($status));
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+    public static function addCompany($request){
+        $check_user = User::where(['name' => $request->name, 'email' => $request->email_address, "user_type" => 2])->first();
+        if ($check_user){
+            return false;
+        }
+        else{
+            $create_company = Company::createCompany($request);
+            $status = User::create([
+                "name" => $request->name,
+                "email" => $request->email_address,
+                "password" => Hash::make($request->email_address),
+                "phone_number" => $request->phone_number,
+                "company_id" => $create_company->id,
+                "user_type" => 2,
+                "token" => Str::Random(16),
+            ]);
+            if($status){
+                Mail::to($status->email)->send(new RegistrationMail($status));
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+
+    }
+    public static function updatePassword($request){
+        $update_status = User::where('id', Auth::user()->id)->first();
+        $status = false;
+        if(Hash::check($request->previous_password, $update_status->password)){
+            User::where('id', Auth::user()->id)->update([
+                'password' => bcrypt($request->password),
+            ]);
+            $status = true ;
+        }
+        return $status;
+    }
+
+    public static function getCompanies(){
+        $companies = User::where('user_type', 2)->get();
+        return $companies;
+    }
+
+    public static function getNUCStaffs(){
+        $staffs = User::where('user_type', 3)->get();
+        return $staffs;
+    }
+
 
 }

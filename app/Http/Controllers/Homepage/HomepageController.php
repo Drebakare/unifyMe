@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Homepage;
 
+use App\Company;
 use App\Institution;
 use App\Student;
 use App\University;
@@ -80,6 +81,29 @@ class HomepageController extends Controller
             $staffs = User::getAllStaffs(Auth::user()->university_id);
             $latest_staffs = User::getLatest5staffs(Auth::user()->university_id);
         }
-        return view('Dashboard.Others.dashboard', compact("students", "latest_students", "staffs", "latest_staffs"));
+        else{
+            $all_students = Student::getStudents();
+            $all_universities = University::getAllUniversities();
+            $companies = User::getCompanies();
+        }
+        return view('Dashboard.Others.dashboard', compact("students", "latest_students", "staffs", "latest_staffs", "all_students", "all_universities","companies"));
+    }
+
+    public function changePassword(){
+        return view('Dashboard.Others.change-password');
+    }
+
+    public function updateChangePassword(Request $request){
+        $validation = $this->validate($request, [
+            'previous_password' => 'bail|required',
+            'password' => 'bail|required|confirmed',
+        ]);
+        $change_password = User::updatePassword($request);
+        if ($change_password){
+            return redirect()->back()->with('success', "Password successfully changed");
+        }
+        else{
+            return redirect()->back()->with('failure', "Password could not be changed");
+        }
     }
 }

@@ -11,7 +11,7 @@ class Biodata extends Model
     ];
 
     public function student(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Student::class);
     }
 
     public static function getStudentBioData($student_id){

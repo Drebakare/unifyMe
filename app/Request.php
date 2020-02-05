@@ -64,7 +64,7 @@ class  Request extends Model
             "password" => Hash::make($staff_details->email_address),
             "phone_number" => $staff_details->phone_number,
             "user_type" => 1,
-            "university_id" => $university_id->id,
+            "university_id" => $university_id,
             "token" => Str::Random(16),
         ]);
         if($status){

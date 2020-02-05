@@ -9,6 +9,9 @@
 		BEGIN: MENU TOGGLE
 **********************************************************/
 jQuery(document).ready(function($){
+	var student = jQuery("#student").val();
+	var university = jQuery("#university").val();
+	var company = jQuery("#company").val();
 	"use strict";
 	jQuery("#menu-toggle").click(function(e) {
 		e.preventDefault();
@@ -172,7 +175,7 @@ jQuery(document).ready(function($){
 				"#FFC36D",
 				"#27AE60"
 			  ],
-			  data: [30, 30, 40]
+			  data: [company, university, student]
 			}]
 		},
 		options: {

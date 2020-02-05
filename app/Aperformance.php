@@ -39,8 +39,9 @@ class Aperformance extends Model
         $matric_no = 'matric_no_'.$count;
         $total_point = 'total_point_'.$count;
         $total_unit = 'total_unit_'.$count;
-        $school_grade_point = 5;
         $student = Student::getStudentByMatricNo($request->$matric_no);
+        $grade_point = GradePoint::getGradePointByUniversityId($student->university_id);
+        $school_grade_point = $grade_point;
         $add_academic_performance = Aperformance::create([
             "student_id" => $student->id,
             "semester_year_id" => $request->semester_yr_id,
@@ -54,9 +55,10 @@ class Aperformance extends Model
         $matric_no = 'matric_no_'.$count;
         $total_point = 'total_point_'.$count;
         $total_unit = 'total_unit_'.$count;
-        $school_grade_point = 5;
         $student = Student::getStudentByMatricNo($request->$matric_no);
-        $add_academic_performance = Aperformance::where(["student_id" => $student->id, "semester_id" =>$request->semester_yr_id])->update([
+        $grade_point = GradePoint::getGradePointByUniversityId($student->university_id);
+        $school_grade_point = $grade_point;
+        $add_academic_performance = Aperformance::where(["student_id" => $student->id, "semester_year_id" =>$request->semester_yr_id])->update([
             "student_id" => $student->id,
             "semester_year_id" => $request->semester_yr_id,
             "total_point" => $request->$total_point,

@@ -15,8 +15,8 @@
                     <img src="{{asset('_landing/assets/img/slider/slide4.jpg')}}" alt="slide1">
                     <div class="carousel-caption">
                         <h4><i class="fa fa-star-o"></i>WE ARE BEST<i class="fa fa-star-o"></i></h4>
-                        <h2>The Unified Database for <span>Nigeria</span> Education System</h2>
-                        <p>A centralize collation system that powers the education sector database</p>
+                        <h2>The Unified System for <span>Nigeria</span> Education</h2>
+                        <p>A centralize collation system that powers the education sector</p>
                         <a href="{{route('request_form')}}"><i class="fa fa-paper-plane"></i>Request Access</a>
                     </div>
                 </div>

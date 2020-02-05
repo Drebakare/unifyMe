@@ -1,8 +1,8 @@
 <div class="row dashboard-top-nav">
-    <div class="col-sm-3 logo">
+    <div class="col-sm-7 logo">
         <h5><i class="fa fa-book"></i>UnifyMe</h5>
     </div>
-    <div class="col-sm-4 top-search">
+    <div class="col-sm-4 top-search hidden">
         <div class="search">
             <i class="fa fa-search"></i>
             <input type="text" placeholder="Search">
@@ -10,7 +10,7 @@
     </div>
     <div class="col-sm-5 notification-area">
         <ul class="top-nav-list">
-            <li class="notification dropdown">
+            <li class="notification dropdown hidden">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-bell-o"></i>
                     <span class="badge nav-badge">3</span>
@@ -71,7 +71,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="message dropdown">
+            <li class="message dropdown hidden">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-comment-o"></i>
                     <span class="badge nav-badge">5</span>
@@ -83,7 +83,7 @@
                                 <img src="assets/img/parent/parent2.jpg" alt="user" />
                             </div>
                             <div class="col-sm-10 desc">
-                                <h5><a href="#">John Doe</a></h5>
+                                <h5><a href="#">{{Auth::user()->name}}</a></h5>
                                 <p>Lorem Ipsum is simply dummy text.</p>
                                 <h6><i class="fa fa-clock-o"></i> 1 day ago</h6>
                             </div>
@@ -112,20 +112,14 @@
             </li>
             <li class="user dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span><img src="{{asset('_dashboard/assets/img/parent/parent2.jpg')}}" alt="user">JOHN DOE<span class="caret"></span></span>
+                    <span><img src="{{asset('_dashboard/assets/img/parent/parent2.jpg')}}" alt="user">{{Auth::user()->name}}<span class="caret"></span></span>
                 </a>
                 <ul class="dropdown-menu notification-list">
-                    <li>
-                        <a href="#"><i class="fa fa-cogs"></i> SETTINGS</a>
-                    </li>
-                    <li>
+                    {{--<li>
                         <a href="#"><i class="fa fa-users"></i> USER PROFILE</a>
-                    </li>
+                    </li>--}}
                     <li>
-                        <a href="#"><i class="fa fa-key"></i> CHANGE PASSWORD</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-cogs"></i> SETTINGS</a>
+                        <a href="{{route('user.change-password')}}"><i class="fa fa-key"></i> CHANGE PASSWORD</a>
                     </li>
                     <li>
                         <div class="all-notifications">

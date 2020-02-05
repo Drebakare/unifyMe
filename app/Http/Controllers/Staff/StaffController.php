@@ -6,7 +6,9 @@ use App\Aperformance;
 use App\Biodata;
 use App\Department;
 use App\Faculty;
+use App\GradePoint;
 use App\Nationality;
+use App\RequestResult;
 use App\Semester;
 use App\SemesterYear;
 use App\State;
@@ -121,6 +123,14 @@ class StaffController extends Controller
         return view('Dashboard.Others.Staff.students-list', compact("faculties", "departments", "years", "students"));
     }
 
+    public function NucupdateBioData(){
+        $students = Student::getStudents();
+        $faculties = Faculty::getFaculties();
+        $departments = Department::getDepartments();
+        $years = Year::getYears();
+        return view('Dashboard.Others.Staff.nuc-students-list', compact("faculties", "departments", "years", "students"));
+    }
+
     public function updateStudentDetails(Request $request, $id){
         $student_update = Student::updateStudentDetails($request, $id);
         if ($student_update){
@@ -217,7 +227,7 @@ class StaffController extends Controller
     public function processUpdateResult(Request $request){
         $status = false;
         for($i = 0; $i < $request->maximum_number; $i++){
-            Aperformance::addPerformace($request, $i);
+            Aperformance::updatePerformace($request, $i);
             $status = true;
         }
         if ($status){
@@ -238,10 +248,153 @@ class StaffController extends Controller
         return view('Dashboard.Others.Staff.view-result', compact('students'));
     }
 
+    public function viewNUCResult(){
+        $students =  Student::getStudents();
+        return view('Dashboard.Others.Staff.nuc-view-result', compact('students'));
+    }
+
     public function viewStudentResult($id){
         $student = Student::getStudentById($id);
         $results = Aperformance::studentsPerformance($id);
-        $school_grade_point = 5;
+        $grade_point = GradePoint::getGradePointByUniversityId($student->university_id);
+        $school_grade_point = $grade_point;
         return view('Dashboard.Others.Staff.view-student-result', compact('results', 'school_grade_point', 'student'));
+    }
+
+    public function requestResult(){
+        $universities = University::getAllUniversities();
+        $faculties = Faculty::getFaculties();
+        $departments = Department::getDepartments();
+        return view('Dashboard.Others.Staff.select-result-request-section', compact('universities', 'faculties', 'departments'));
+    }
+
+    public function getRequestStudents(Request $request){
+        $students = Student::getRequestStudents($request);
+        if (count($students) > 0){
+            return view('Dashboard.Others.Staff.view-request-student-list', compact('students'));
+        }
+        else{
+
+            return redirect()->back()->with("failure", "No student in the options selected");
+        }
+    }
+
+    public function finalRequestAccess($id){
+        $status = RequestResult::checkRequest($id);
+        if ($status){
+            return redirect(route('user.request-result'))->with("failure", "Request Already Sent");
+        }
+        else{
+            $add_request = RequestResult::addRequest($id);
+            if ($add_request){
+                return redirect(route('user.request-result'))->with("success", "Request successfully submitted");
+            }
+            else{
+                return redirect(route('user.request-result'))->with("failure", "Request could not be submitted");
+            }
+        }
+    }
+
+    public function viewRequest(){
+        $requests= null;
+        if (Auth::user()->faculty_id != null){
+            $requests = RequestResult::getRequestsByFaculty(Auth::user()->faculty_id);
+        }
+        else{
+            $requests = RequestResult::getRequestsByUniversity();
+        }
+        return view('Dashboard.Others.Staff.requests-list', compact('requests'));
+    }
+
+    public function acceptRequest(Request $request){
+        $request_parameters = $request->route()->parameters();
+        $request_id = $request_parameters["request_id"];
+        $status = RequestResult::acceptRequest($request_id);
+        if ($status){
+            return redirect()->back()->with("success", "Request successfully accepted");
+        }
+        else{
+            return redirect()->back()->with("failure", "request could not be accepted");
+        }
+    }
+
+    public function rejectRequest(Request $request){
+        $request_parameters = $request->route()->parameters();
+        $request_id = $request_parameters["request_id"];
+        $status = RequestResult::rejectRequest($request_id);
+        if ($status){
+            return redirect()->back()->with("success", "Request successfully rejected");
+        }
+        else{
+            return redirect()->back()->with("failure", "request could not be rejected");
+        }
+    }
+
+    public function viewRequestStatus(){
+        $requests= null;
+        $requests = RequestResult::getRequestsById();
+        return view('Dashboard.Others.Staff.view-requests-status', compact('requests'));
+    }
+
+    public function externalViewResult($request_id){
+        $request = RequestResult::getRequestById($request_id);
+        $student = Student::getStudentById($request->student_id);
+        $results = Aperformance::studentsPerformance($request->student_id);
+        $grade_point = GradePoint::getGradePointByUniversityId($student->university_id);
+        $school_grade_point = ceil($grade_point);
+        return view('Dashboard.Others.Staff.view-student-result', compact('results', 'school_grade_point', 'student'));
+
+
+    }
+
+    public function systemSettings(){
+        $grade_point = GradePoint::getGradePoint();
+        return view('Dashboard.Others.Staff.system-settings', compact('grade_point'));
+    }
+
+    public function updateSystemSettings(Request $request){
+        $grade_point = GradePoint::updateGradePoint($request->grade_point);
+        if ($grade_point){
+            return redirect()->back()->with("success", "Grade point successfully updated");
+        }
+        else{
+            return redirect()->back()->with("failure", "Grade point could not be update");
+        }
+    }
+
+    public function addFaculty(){
+        $faculties = Faculty::getAllFaculties(Auth::user()->university_id);
+        return view('Dashboard.Others.Staff.add-faculty', compact('faculties'));
+    }
+
+    public function addDepartment(){
+        $faculties = Faculty::getAllFaculties(Auth::user()->university_id);
+        if (Auth::user()->faculty !=null){
+            $departments = Department::getAllDepartmentsByFaculty(Auth::user()->university_id, Auth::user()->faculty_id);
+        }
+        if (Auth::user()->faculty ==null){
+            $departments = Department::getAllDepartments(Auth::user()->university_id);
+        }
+        return view('Dashboard.Others.Staff.add-department', compact('departments', 'faculties'));
+    }
+
+    public function updateAddFaculty(Request $request){
+        $faculty = Faculty::addFaculty($request);
+        if ($faculty){
+            return redirect()->back()->with("success", "Faculty successfully added");
+        }
+        else{
+            return redirect()->back()->with("failure", "Faculty could not be successfully added");
+        }
+    }
+
+    public function updateAddDepartment(Request $request){
+        $department = Department::addDepartment($request);
+        if ($department){
+            return redirect()->back()->with("success", "Department successfully added");
+        }
+        else{
+            return redirect()->back()->with("failure", "Department could not be successfully added");
+        }
     }
 }

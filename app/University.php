@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class University extends Model
 {
@@ -29,6 +30,10 @@ class University extends Model
         return $this->hasMany(RequestResult::class);
     }
 
+    public function gradepoint(){
+        return $this->hasOne(GradePoint::class);
+    }
+
     public static function getAllUniversities(){
         $universities = University::get();
         return $universities;
@@ -41,6 +46,20 @@ class University extends Model
     public static function getInstitutionId($institution_name){
         $institution = University::where('name', $institution_name)->first();
         return $institution->id;
+    }
+
+    public static function addUniversity($request){
+        $university = University::where([ 'name' => strtoupper($request->university_name)])->first();
+        if ($university){
+            return true;
+        }
+        else{
+            $create_university = University::create([
+                "name" => $request->university_name,
+                'location' =>  strtoupper($request->location),
+            ]);
+            return true;
+        }
     }
 
 

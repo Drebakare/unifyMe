@@ -11,7 +11,7 @@
                         <div class="stat-item">
                             <div class="stats">
                                 <div class="col-xs-8 count">
-                                    <h1>199</h1>
+                                    <h1>{{count($all_students)}}</h1>
                                     <p>STUDENTS</p>
                                 </div>
                                 <div class="col-xs-4 icon">
@@ -26,7 +26,7 @@
                         <div class="stat-item">
                             <div class="stats">
                                 <div class="col-xs-8 count">
-                                    <h1>111</h1>
+                                    <h1>{{count($all_universities)}}</h1>
                                     <p>Universities</p>
                                 </div>
                                 <div class="col-xs-4 icon">
@@ -42,7 +42,7 @@
                         <div class="stat-item">
                             <div class="stats">
                                 <div class="col-xs-8 count">
-                                    <h1>900</h1>
+                                    <h1>{{count($companies)}}</h1>
                                     <p>Companies</p>
                                 </div>
                                 <div class="col-xs-4 icon">
@@ -246,6 +246,161 @@
                 </div>--}}
             </div>
         </div>
+        @endif
+        @if(Auth::user()->user_type == 3)
+            <div class="row">
+                <div class="col-lg-12 clear-padding-xs">
+                    <div class="col-sm-12">
+                        <div>
+                            <div class="my-msg dash-item">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h6 class="item-title"><i class="fa fa-user"></i>Students List</h6>
+                                    </div>
+                                </div>
+                                <div class="inner-item">
+                                    <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th><i class="fa fa-user"></i>Name</th>
+                                            <th><i class="fa fa-id-card"></i>University</th>
+                                            <th><i class="fa fa-book"></i>Matric No</th>
+                                            <th><i class="fa fa-tasks"></i>Faculty</th>
+                                            <th><i class="fa fa-tasks"></i>Department</th>
+                                            <th><i class="fa fa-tasks"></i>Year of Admission</th>
+                                            <th><i class="fa fa-tasks"></i>State of Origin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($all_students as $all_student)
+                                            <tr>
+                                                <td>{{$all_student->student_name}}</td>
+                                                <td>{{$all_student->university->name}}</td>
+                                                <td>{{$all_student->student_matric_no}}</td>
+                                                <td>{{$all_student->faculty->faculty_name}}</td>
+                                                <td>{{$all_student->department->department_name}}</td>
+                                                <td>{{$all_student->year_of_admission}}</td>
+                                                <td>@if ($all_student->biodata){{$all_student->biodata->state}}@else not updated yet @endif</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{--<div class="col-sm-6">
+                        <div>
+                            <div class="my-msg dash-item">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h6 class="item-title"><i class="fa fa-user"></i>Last {{count($latest_staffs)}} added staffs</h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href="#"><h6 class="item-title"> view all <i class="fa fa-arrow-right"></i></h6></a>
+                                    </div>
+                                </div>
+                                <div class="inner-item">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th><i class="fa fa-user"></i>Name</th>
+                                            <th><i class="fa fa-id-card"></i>Email</th>
+                                            <th><i class="fa fa-book"></i>Univesity</th>
+                                            <th><i class="fa fa-tasks"></i>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @if(count($latest_staffs) > 0)
+                                            @foreach($latest_staffs as $latest_staff)
+                                                <tr>
+                                                    <td>{{$latest_staff->name}}</td>
+                                                    <td>{{$latest_staff->email}}</td>
+                                                    <td>{{$latest_staff->university->name}}</td>
+                                                    <td class="action-link">
+                                                        <a class="edit" href="--}}{{--{{route('admin.add-staff', ['staff_id' => $request->staff_id])}}--}}{{--" title="Add Staff" ><i class="fa fa-plus-circle"></i></a>
+                                                        <a class="delete" href="--}}{{--{{route('admin.delete-request', ["staff_id" => $request->staff_id])}}--}}{{--" title="Delete Request"><i class="fa fa-remove"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><i class="fa fa-info-circle"></i> No recent access request, all requests successfully handled</h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>--}}
+
+                    {{--<div class="col-sm-6">
+                        <div>
+                            <div class="my-msg dash-item">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h6 class="item-title"><i class="fa fa-user"></i>Recent Access Request</h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href="#"><h6 class="item-title"> view all <i class="fa fa-arrow-right"></i></h6></a>
+                                    </div>
+                                </div>
+                                <div class="inner-item">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th><i class="fa fa-user"></i>Name</th>
+                                            <th><i class="fa fa-id-card"></i>University</th>
+                                            <th><i class="fa fa-book"></i>Staff ID</th>
+                                            <th><i class="fa fa-tasks"></i>ACTION</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @if(count($requests) > 0)
+                                            @foreach($requests as $request)
+                                                <tr>
+                                                    <td>{{$request->name}}</td>
+                                                    <td>{{$request->institution_name}}</td>
+                                                    <td>{{$request->staff_id}}</td>
+                                                    <td class="action-link">
+                                                        <a class="edit" href="{{route('admin.add-staff', ['staff_id' => $request->staff_id])}}" title="Add Staff" ><i class="fa fa-plus-circle"></i></a>
+                                                        <a class="delete" href="{{route('admin.delete-request', ["staff_id" => $request->staff_id])}}" title="Delete Request"><i class="fa fa-remove"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td>
+                                                      <h6><i class="fa fa-info-circle"></i> No recent access request, all requests successfully handled</h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="my-msg dash-item">
+                                        <h6 class="item-title"><i class="fa fa-pie-chart"></i>Users' Analysis</h6>
+                                        <div class="chart-item">
+                                            <canvas id="studentPie" height = 250px></canvas>
+                                            <div class="chart-legends">
+                                                <span class="red">Companies</span>
+                                                <span class="orange">Universities</span>
+                                                <span class="green">Students</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>--}}
+                </div>
+            </div>
         @endif
         {{--<div class="row">
             <div class="col-lg-12 clear-padding-xs">

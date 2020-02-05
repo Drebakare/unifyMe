@@ -107,4 +107,15 @@ class Student extends Model
             return false;
         }
     }
+
+    public static function getRequestStudents($request){
+        $students = Student::where(['university_id' => $request->university_id,
+            'faculty_id' => $request->faculty_id, 'department_id' => $request->department_id])->get();
+        return $students;
+    }
+
+    public static function getStudents(){
+        $students = Student::get();
+        return $students;
+    }
 }

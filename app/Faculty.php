@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Faculty extends Model
 {
@@ -31,8 +32,27 @@ class Faculty extends Model
         return $faculties;
     }
 
+    public static function getFaculties(){
+        $faculties = Faculty::get();
+        return $faculties;
+    }
+
     public static function getFacultyId($faculty_name){
         $faculty = Faculty::where('name', $faculty_name)->first();
         return $faculty->id;
+    }
+
+    public static function addFaculty($request){
+        $faculty = Faculty::where(['university_id' => Auth::user()->university_id, 'faculty_name' => strtoupper($request->faculty_name)])->first();
+        if ($faculty){
+            return true;
+        }
+        else{
+            $create_faculty = Faculty::create([
+                "university_id" => Auth::user()->university_id,
+                'faculty_name' =>  strtoupper($request->faculty_name),
+            ]);
+            return true;
+        }
     }
 }
